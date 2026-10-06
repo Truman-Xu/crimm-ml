@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crimm-ml"
+version = "0.1.0a1"
+description = "RFdiffusion loop building for crimm, on ONNX Runtime without PyTorch"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Truman Xu", email = "ziqiaoxu@umich.edu" }]
+# 3.9 is past end-of-life and its newest onnxruntime is 1.19 (2024).
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "omegaconf>=2.3",
+    # 1.18 is the oldest release that loads the model (IR version 10); 1.17 cannot.
+    "onnxruntime>=1.18",
+    "platformdirs>=3",
+    "crimm>=2026.2",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Development Status :: 3 - Alpha",
+]
+
+[project.optional-dependencies]
+progress = ["tqdm>=4.60"]
+# Run the original PyTorch checkpoint instead of the ONNX export.
+torch = ["torch>=2.4"]
+# Rebuild and verify the ONNX export (tools/export/); tested with torch 2.14.
+export = ["torch>=2.14", "onnx>=1.16", "onnxscript"]
+dev = ["pytest>=7", "build", "twine"]
+
+[project.scripts]
+crimm-ml = "crimm_ml.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Truman-Xu/crimm-ml"
+crimm = "https://github.com/BrooksResearchGroup-UM/crimm"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+crimm_ml = ["data/*.yaml", "data/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["slow: a full T=50 design, about a minute or more"]

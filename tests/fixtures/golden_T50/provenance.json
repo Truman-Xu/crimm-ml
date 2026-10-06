@@ -1,0 +1,18 @@
+{
+  "pdb": "2KL8.pdb",
+  "contig": "A1-20/6-6/A27-79",
+  "T": 50,
+  "seed": 0,
+  "model": {
+    "rf_loop_dynamic_tp_ort.onnx": "bd49337575f01cc79bfeb7afc824a49e4974f90e10a014e7f2591df4197304f2",
+    "rf_loop_dynamic_tp_ort.onnx.data": "ce8387e47ae950f101dcee20e836e90086ad168c1465afdb2f3ebd57e5217e14"
+  },
+  "threads": 4,
+  "device": "cpu",
+  "crimm_ml": "0.1.0a1",
+  "onnxruntime": "1.30.0",
+  "numpy": "2.4.6",
+  "python": "3.11.13",
+  "machine": "x86_64",
+  "created": "2026-10-06"
+}

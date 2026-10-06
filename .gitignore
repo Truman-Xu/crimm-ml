@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+.pytest_cache/
+
+# model files and caches are fetched, never committed (see src/crimm_ml/assets.py)
+*.onnx
+*.onnx.data
+*.pt
+*.npz
+!tests/fixtures/**/*.npz

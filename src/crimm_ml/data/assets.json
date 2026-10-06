@@ -1,0 +1,12 @@
+{
+  "model": {
+    "description": "RFdiffusion Base_ckpt.pt exported to ONNX, shape-dynamic, with the ONNX Runtime graph rewrites",
+    "files": [
+      {"name": "rf_loop_dynamic_tp_ort.onnx", "size": 35868667,
+       "sha256": "bd49337575f01cc79bfeb7afc824a49e4974f90e10a014e7f2591df4197304f2"},
+      {"name": "rf_loop_dynamic_tp_ort.onnx.data", "size": 239210624,
+       "sha256": "ce8387e47ae950f101dcee20e836e90086ad168c1465afdb2f3ebd57e5217e14"}
+    ],
+    "urls": []
+  }
+}
