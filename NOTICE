@@ -2,8 +2,9 @@ crimm-ml
 Copyright (C) 2026 Truman Xu (徐梓乔) and the crimm developers.
 Licensed under the GNU General Public License, version 3 or later (see LICENSE).
 
-This package contains code derived from RFdiffusion, and its released model
-files are derived from RFdiffusion's model weights:
+This package contains code derived from RFdiffusion, NVIDIA's SE(3)-Transformer
+and e3nn, and its released model files are derived from RFdiffusion's model
+weights. From RFdiffusion:
 
   - src/crimm_ml/minimal_rf/   a reduced copy of RFdiffusion's network and
                                inference code, with the DGL/e3nn SE(3)-Transformer
@@ -51,3 +52,55 @@ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
 HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
 LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+----------------------------------------------------------------------------
+
+src/crimm_ml/minimal_rf/se3/ is derived from two further projects:
+
+  - NVIDIA's SE(3)-Transformer (`se3_transformer`, as shipped in RFdiffusion's
+    env/SE3Transformer): the network layers, rewritten here without DGL.
+  - e3nn 0.3.3: `spherical_harmonics.py` is copied from
+    e3nn/o3/_spherical_harmonics.py, and `_wigner_3j_data.py` holds constants
+    generated with e3nn.o3.wigner_3j.
+
+Both are distributed under the MIT licence, reproduced below.
+
+----------------------------------------------------------------------------
+SE(3)-Transformer
+
+Copyright 2021 NVIDIA CORPORATION & AFFILIATES
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+----------------------------------------------------------------------------
+e3nn
+
+MIT License
+
+Euclidean neural networks (e3nn) Copyright (c) 2020, The Regents of the
+University of California, through Lawrence Berkeley National Laboratory
+(subject to receipt of any required approvals from the U.S. Dept. of Energy), 
+Ecole Polytechnique Federale de Lausanne (EPFL), Free University of Berlin 
+and Kostiantyn Lapchevskyi. All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy 
+of this software and associated documentation files (the "Software"), to deal 
+in the Software without restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the 
+Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+SOFTWARE.

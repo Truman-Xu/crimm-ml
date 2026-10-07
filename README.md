@@ -64,4 +64,11 @@ ONNX export is the shipped form.
 ## Licence
 
 GPL-3.0-or-later. Portions are derived from RFdiffusion (BSD licence, which
-also covers the model weights); see `NOTICE`.
+also covers the model weights), NVIDIA's SE(3)-Transformer and e3nn (both MIT);
+see `NOTICE`.
+
+## Authors and contributing
+
+Written by Truman Xu and Claude (Anthropic); see [AUTHORS.md](AUTHORS.md). AI models that
+write code here are credited as authors, by rules set out in
+[CONTRIBUTING.md](CONTRIBUTING.md) along with the other developer rules.

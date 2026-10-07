@@ -8,8 +8,11 @@ version = "0.1.0a1"
 description = "RFdiffusion loop building for crimm, on ONNX Runtime without PyTorch"
 readme = "README.md"
 license = "GPL-3.0-or-later"
-license-files = ["LICENSE", "NOTICE"]
-authors = [{ name = "Truman Xu", email = "ziqiaoxu@umich.edu" }]
+license-files = ["LICENSE", "NOTICE", "AUTHORS.md"]
+authors = [
+    { name = "Truman Xu", email = "ziqiaoxu@umich.edu" },
+    { name = "Claude (Anthropic)", email = "noreply@anthropic.com" },
+]
 # 3.9 is past end-of-life and its newest onnxruntime is 1.19 (2024).
 requires-python = ">=3.10"
 dependencies = [
