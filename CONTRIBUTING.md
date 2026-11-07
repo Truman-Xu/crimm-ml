@@ -43,7 +43,7 @@ the rules. They apply equally to people and to AI models unless a rule says othe
    docstrings, test names or file names. A comment explains the code; the commit says who
    wrote it. A reviewer who finds a signature in a file removes it.
 3. **Credit what landed.** A commit earns credit when it is merged. Plans, reviews,
-   suggestions and reverted work are acknowledged in the pull request or the handoff log, not
+   suggestions and reverted work are acknowledged in the pull request or the agent log, not
    in `AUTHORS.md`.
 4. **Be exact about what is yours.** Do not sign for code you ported, vendored or generated
    from another project as if it were original: say "port of", "derived from" or "generated

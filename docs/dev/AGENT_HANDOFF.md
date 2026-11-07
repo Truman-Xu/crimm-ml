@@ -11,7 +11,8 @@ default_branch: main
 sibling_repos:
   crimm: /home/ziqiaoxu/crimm                 # depends on; has its own AGENT_HANDOFF.md
   rfdiffusion_fork: /home/ziqiaoxu/RFdiffusion # provenance, checkpoint, research probes
-last_updated: 2026-10-06
+last_updated: 2026-11-07
+log: open issue labelled agent-log   # gh issue list --label agent-log --state open
 ```
 
 ## 0. Protocol
@@ -19,25 +20,42 @@ last_updated: 2026-10-06
 Identical to crimm's, so an agent moving between the two repos follows one set of rules.
 Read this section fully. Skim the rest for what your task touches.
 
+This file holds what changes rarely: protocol, orientation, the owner's standing
+instructions, the environment and gotchas. What changes every session (STATE, CLAIMS and
+LOG) is in the open GitHub issue labelled `agent-log` (section 5), so that recording a
+session needs no commit.
+
 ### On arrival
 
 1. Read sections 1 to 4. They are short and change rarely.
-2. Read section 5 (STATE) and the newest three entries of section 8 (LOG).
+2. Read the `agent-log` issue: its description (CLAIMS and STATE) and its newest three
+   comments (LOG). `N=$(gh issue list --label agent-log --state open --json number -q
+   '.[0].number')`, then `gh issue view $N` and `gh issue view $N --comments`.
 3. Run `git status --short` and `git log --oneline -5`. If they disagree with STATE, trust
    git and correct STATE.
-4. Check section 6 (CLAIMS) before editing a file. If another agent holds it, do not edit it.
-5. **If your task touches crimm** (anything under `/home/ziqiaoxu/crimm`), also follow the
-   arrival steps of crimm's `docs/dev/AGENT_HANDOFF.md`: other agents work there
-   concurrently, and claims live in that file, not this one.
+4. Check CLAIMS before editing a file. If another agent holds it, do not edit it.
+5. **If your task touches crimm**, also follow the arrival steps of crimm's
+   `docs/dev/AGENT_HANDOFF.md`: other agents work there concurrently, and crimm's claims are
+   in crimm's own `agent-log` issue, not here.
 
 ### On departure
 
-1. Append one entry to LOG (newest first, template in section 8).
-2. Update STATE so it is true now. Rewrite it in place; do not append.
-3. Release your CLAIMS.
-4. Move anything you learned that will still be true next month into FACTS or GOTCHAS.
+1. Post one LOG entry as a comment on the `agent-log` issue (template in the issue
+   description): `gh issue comment $N --body-file <file>`.
+2. Update STATE so it is true now. Re-read the description immediately before, edit it in
+   place, and write it back with `gh issue edit $N --body-file <file>`. Do not append.
+3. Release your CLAIMS in the same edit.
+4. Move anything you learned that will still be true next month into FACTS or GOTCHAS of
+   this file. That is a tracked change; commit it with your work.
 5. If you changed anything crimm relies on, or anything about how crimm calls this package,
-   log a one-line pointer in crimm's AGENT_HANDOFF too.
+   post a one-line pointer as a comment on crimm's `agent-log` issue too.
+
+Without network access or `gh`, write the entry and the new STATE to local files and post
+them in your next session that has both.
+
+When the issue grows long (about 50 comments) or a ROADMAP stage closes, open the next
+one (label `agent-log`) with the current STATE, link it from the old one, then close the old
+one and move the pin.
 
 ### Writing rules
 
@@ -50,15 +68,19 @@ Read this section fully. Skim the rest for what your task touches.
 - **Cite locations** as `path:line` or `path::symbol`. Prefer the symbol; line numbers rot.
 - **State what you did not check.**
 - **One fact, one place.** Link to the files below instead of copying from them.
-- **Do not delete another agent's entry.** If it is wrong, add `SUPERSEDED YYYY-MM-DD by
-  <agent>: <why>` under it.
+- **Do not edit or delete another agent's entry.** If it is wrong, say so in your own
+  comment: `SUPERSEDED YYYY-MM-DD by <agent>: <why>`, with a link to the comment.
 - **Identify yourself** as `<model>/<tool>/<short task name>`, for example
   `claude-opus/claude-code/crimm-ml`.
+- **The log is public**, like this file. Comments appear under the GitHub account the agent
+  runs as, usually a person's, so the `<model>/<tool>/<task>` heading of your comment is
+  what tells sessions apart. Nothing about a particular machine or account in the log;
+  that goes in the owner's `CLAUDE.local.md`.
 - Keep entries terse.
 
 ### What goes where
 
-| Kind of information | File |
+| Kind of information | Place |
 | --- | --- |
 | What the package is, install, quick start | `README.md` |
 | How the ONNX model is built, made fast, verified; all measurements | `docs/COMPILING.md` |
@@ -67,7 +89,9 @@ Read this section fully. Skim the rest for what your task touches.
 | Planned work, order, status | `docs/dev/ROADMAP.md` |
 | Developer rules, including how people and AI models are credited | `CONTRIBUTING.md` |
 | Who the authors are | `AUTHORS.md` (third-party origins: `NOTICE`) |
-| Who is doing what, what was tried, traps, state | this file |
+| Who is doing what, current state, what was tried, decisions | the `agent-log` issue (section 5) |
+| Questions an agent could not settle | an issue labelled `question` |
+| Protocol, standing instructions, environment facts, traps | this file |
 
 ## 1. Orientation
 
@@ -95,6 +119,7 @@ Read this section fully. Skim the rest for what your task touches.
 | Date | Instruction | Tag |
 | --- | --- | --- |
 | 2026-10-06 | Do not commit or push unless asked. | `[told]` |
+| 2026-11-07 | Agent activity (state, claims, session log) is not kept in a tracked file. It goes in the open `agent-log` issue; open questions are issues labelled `question` (section 5). Same as crimm and msld-prep. | `[told]` |
 | 2026-10-06 | Never modify `rfdiffusion/` in the fork. | `[told]` |
 | 2026-10-06 | The owner's `Tests.ipynb` and `.vscode/` in the fork are theirs; do not edit. `crimm/Modeller/CoordManipulator.py` and `Solvator.py` in crimm carry uncommitted owner work. | `[told]` |
 | 2026-10-06 | Keep crimm as a hard dependency. The postprocessing that builds residues is crimm functions, in crimm's repo. | `[told]` |
@@ -166,85 +191,14 @@ srun --partition=cpu --cpus-per-task=32 --time=01:00:00 <command>
 | G15 | On GPU in PyTorch, `index_add_` is not bit-reproducible; set `torch.use_deterministic_algorithms(True, warn_only=True)` before comparing. | `[ran 2026-09-09]` |
 | G16 | crimm's `docs/dev/*.md` are edited by other sessions concurrently. Re-read before a targeted edit; never rewrite whole files. | `[ran 2026-10-06]` |
 
-## 5. State
+## 5. State, claims, open questions and log
 
-Rewrite in place. True as of `2026-10-06`.
+These change every session, so they are not kept in this file. Since 2026-11-07 `[told]`:
 
-```yaml
-branch: main
-head: "second commit on main (agent docs, authorship rules); run git log"
-uncommitted_agent_work: none
-remote: git@github.com:Truman-Xu/crimm-ml.git   # repo not yet created on GitHub; nothing pushed
-published: nothing                  # not on PyPI; assets.json has no download URL
-tests: {fast: "6 passed + 2 skipped without model", full: "8 passed, 1 skipped", date: 2026-10-06}
-roadmap_done: [S0 Records, S1 New repo, S2 Model asset]
-roadmap_next:
-  - "S4: owner creates the GitHub repo; push"
-  - "S3: waits on crimm ROADMAP 1.5 (optional imports), being done by another session"
-  - "S5 Service: can start; the job body needs S3"
-fork_uncommitted_agent_work:        # /home/ziqiaoxu/RFdiffusion
-  - crimm_integration/DISTRIBUTING.md, MINIMAL_MODEL.md   # same text is committed here
-```
-
-## 6. Claims
-
-| Path or area | Agent | Since | Purpose |
-| --- | --- | --- | --- |
-| (none) | | | |
-
-## 7. Open questions
-
-| ID | Question | Raised |
-| --- | --- | --- |
-| Q1 | Public or private GitHub repo? Release downloads from a private repo need authentication, so it must be public before S4's model release. Owner decision. | 2026-10-06 |
-| Q2 | Should crimm get a root `AGENTS.md` pointing to its `docs/dev/AGENT_HANDOFF.md`? Tools that auto-read root files will not find the handoff otherwise. Owner decision, raised in crimm's handoff entry 3. | 2026-10-06 |
-| Q3 | Cloud provider and account for S7. Owner decision. | 2026-10-06 |
-
-## 8. Log
-
-Newest first. Append only. Template:
-
-```markdown
-### YYYY-MM-DD <model>/<tool>/<task>
-
-- asked: <what the owner asked for, one line>
-- did: <what changed, with paths>
-- verified: <what you ran and the result>
-- not verified: <what you assumed or skipped>
-- found: <bugs, surprises; point to ROADMAP rows or GOTCHAS>
-- next: <the obvious next step, and anything blocking it>
-```
-
-### 2026-10-06 claude-opus/claude-code/crimm-ml (entry 2)
-
-- asked: credit the AI author in the package; set credit rules for all future agents, with
-  the owner's one condition (clean, decluttered code base); declare it for humans.
-- did: `AUTHORS.md`, `CONTRIBUTING.md` (developer rules; "Credit and authorship" is the
-  decision), a rule in `AGENTS.md`, Claude added to `authors` in `pyproject.toml` at the
-  owner's instruction, README section. `NOTICE` gained the MIT notices for NVIDIA's
-  SE(3)-Transformer and e3nn, which `minimal_rf/se3/` is derived from.
-- verified: built metadata lists both authors; fast tests pass; grep finds no signatures in
-  `src`, `tools`, `tests`. `[ran]`
-- not verified: whether any other file is derived from a project missing from `NOTICE`;
-  only `minimal_rf/se3/` was checked, from its own docstrings.
-- found: the missing MIT notices above.
-- next: unchanged from entry 1.
-
-### 2026-10-06 claude-opus/claude-code/crimm-ml (entry 1)
-
-- asked: split the ML part of crimm into its own repo for `pip install crimm[ml]`; prepare a
-  containerized loop-building service; write handoff docs for agents.
-- did: created this repo from the fork's `crimm_integration/` (S0 to S2 in ROADMAP); fork
-  commit `763bbe5` added `crimm_integration/models/`, which `823fe61` had missed because the
-  root `.gitignore` rule `models/` matched at any depth (now `/models/`); wrote
-  `/home/ziqiaoxu/crimm/import-fix.md`; added crimm ROADMAP "Parallel track: crimm-ml
-  integration"; wrote `AGENTS.md`, `CLAUDE.md`, `docs/dev/ROADMAP.md` and this file.
-- verified: fork and new sampler bit-identical at T=15 and T=50 (seed 0); clean-venv wheel
-  install samples with neither torch nor crimm imported; pytest 8 passed, 1 skipped (needs
-  rdkit); `verify_numpy_sampler.py` all six phases pass; asset fetch from directory and HTTP,
-  corrupted-file rejection; onnxruntime 1.17.3 fails to load, 1.18.0 and 1.19.2 match 1.29
-  to ~1e-7 relative. `[ran]`
-- not verified: GPU path from the new repo (verified in the fork before the move, and the
-  code is bit-identical); Python 3.12 and 3.13; NumPy 1.x; Windows and macOS.
-- found: G5, G9.
-- next: owner creates the GitHub repo, then push; S5 service skeleton.
+- **State, claims and the log** are in the open issue labelled `agent-log`, pinned on the
+  issue list. Its description holds Claims and State, rewritten in place; each comment is one
+  session's log entry. Find it with `gh issue list --label agent-log --state open`.
+- **Open questions** are issues labelled `question`.
+- **The earlier log**, 2026-10-06, with State, Claims and the open questions as they stood, is
+  sections 5 to 8 of this file at commit 47856c3:
+  `git show 47856c3:docs/dev/AGENT_HANDOFF.md`.

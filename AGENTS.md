@@ -4,10 +4,13 @@ crimm-ml runs RFdiffusion loop building for crimm on ONNX Runtime, without PyTor
 depends on crimm (`/home/ziqiaoxu/crimm`); crimm calls it for `pip install crimm[ml]`.
 
 **Before doing anything, read [`docs/dev/AGENT_HANDOFF.md`](docs/dev/AGENT_HANDOFF.md)**
-sections 0 to 5. It holds the protocol, the owner's standing instructions, environment
-facts, known traps, current state and claims. Planned work is in
+sections 0 to 4: the protocol, the owner's standing instructions, environment facts and
+known traps. Current state, claims and the session log are in the open GitHub issue
+labelled `agent-log` (`gh issue list --label agent-log --state open`): read its description
+and newest three comments. Planned work is in
 [`docs/dev/ROADMAP.md`](docs/dev/ROADMAP.md); the developer rules, which bind you too, are in
-[`CONTRIBUTING.md`](CONTRIBUTING.md). When you finish, log what you did there.
+[`CONTRIBUTING.md`](CONTRIBUTING.md). When you finish, post what you did as a comment on
+that issue and update its State (handoff, section 0); that needs no commit.
 
 The rules that matter most, in case you read nothing else:
 
